@@ -54,78 +54,78 @@ class PrettyDioLogger extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (request) {
-      _printRequestHeader(options);
-    }
-    if (requestHeader) {
-      _printMapAsTable(options.queryParameters, header: 'Query Parameters');
-      final requestHeaders = <String, dynamic>{};
-      requestHeaders.addAll(options.headers);
-      requestHeaders['contentType'] = options.contentType?.toString();
-      requestHeaders['responseType'] = options.responseType.toString();
-      requestHeaders['followRedirects'] = options.followRedirects;
-      requestHeaders['connectTimeout'] = options.connectTimeout;
-      requestHeaders['receiveTimeout'] = options.receiveTimeout;
-      _printMapAsTable(requestHeaders, header: 'Headers');
-      _printMapAsTable(options.extra, header: 'Extras');
-    }
-    if (requestBody && options.method != 'GET') {
-      final dynamic data = options.data;
-      if (data != null) {
-        if (data is Map) _printMapAsTable(options.data as Map, header: 'Body');
-        if (data is FormData) {
-          final formDataMap = <String, dynamic>{}
-            ..addEntries(data.fields)
-            ..addEntries(data.files);
-          _printMapAsTable(formDataMap, header: 'Form data | ${data.boundary}');
-        } else {
-          _printBlock(data.toString());
-        }
-      }
-    }
+    // if (request) {
+    //   _printRequestHeader(options);
+    // }
+    // if (requestHeader) {
+    //   _printMapAsTable(options.queryParameters, header: 'Query Parameters');
+    //   final requestHeaders = <String, dynamic>{};
+    //   requestHeaders.addAll(options.headers);
+    //   requestHeaders['contentType'] = options.contentType?.toString();
+    //   requestHeaders['responseType'] = options.responseType.toString();
+    //   requestHeaders['followRedirects'] = options.followRedirects;
+    //   requestHeaders['connectTimeout'] = options.connectTimeout;
+    //   requestHeaders['receiveTimeout'] = options.receiveTimeout;
+    //   _printMapAsTable(requestHeaders, header: 'Headers');
+    //   _printMapAsTable(options.extra, header: 'Extras');
+    // }
+    // if (requestBody && options.method != 'GET') {
+    //   final dynamic data = options.data;
+    //   if (data != null) {
+    //     if (data is Map) _printMapAsTable(options.data as Map, header: 'Body');
+    //     if (data is FormData) {
+    //       final formDataMap = <String, dynamic>{}
+    //         ..addEntries(data.fields)
+    //         ..addEntries(data.files);
+    //       _printMapAsTable(formDataMap, header: 'Form data | ${data.boundary}');
+    //     } else {
+    //       _printBlock(data.toString());
+    //     }
+    //   }
+    // }
     super.onRequest(options, handler);
   }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    if (error) {
-      if (err.type == DioErrorType.response) {
-        final uri = err.response?.requestOptions.uri;
-        _printBoxed(
-          header:
-              'DioError ║ Status: ${err.response?.statusCode} ${err.response?.statusMessage}',
-          text: uri.toString(),
-        );
-        if (err.response != null && err.response?.data != null) {
-          logPrint('╔ ${err.type.toString()}');
-          _printResponse(err.response!);
-        }
-        _printLine('╚');
-        logPrint('');
-      } else {
-        _printBoxed(header: 'DioError ║ ${err.type}', text: err.message);
-      }
-    }
+    // if (error) {
+    //   if (err.type == DioErrorType.response) {
+    //     final uri = err.response?.requestOptions.uri;
+    //     _printBoxed(
+    //       header:
+    //           'DioError ║ Status: ${err.response?.statusCode} ${err.response?.statusMessage}',
+    //       text: uri.toString(),
+    //     );
+    //     if (err.response != null && err.response?.data != null) {
+    //       logPrint('╔ ${err.type.toString()}');
+    //       _printResponse(err.response!);
+    //     }
+    //     _printLine('╚');
+    //     logPrint('');
+    //   } else {
+    //     _printBoxed(header: 'DioError ║ ${err.type}', text: err.message);
+    //   }
+    // }
     super.onError(err, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _printResponseHeader(response);
-    if (responseHeader) {
-      final responseHeaders = <String, String>{};
-      response.headers
-          .forEach((k, list) => responseHeaders[k] = list.toString());
-      _printMapAsTable(responseHeaders, header: 'Headers');
-    }
+    // _printResponseHeader(response);
+    // if (responseHeader) {
+    //   final responseHeaders = <String, String>{};
+    //   response.headers
+    //       .forEach((k, list) => responseHeaders[k] = list.toString());
+    //   _printMapAsTable(responseHeaders, header: 'Headers');
+    // }
 
-    if (responseBody) {
-      logPrint('╔ Body');
-      logPrint('║');
-      _printResponse(response);
-      logPrint('║');
-      _printLine('╚');
-    }
+    // if (responseBody) {
+    //   logPrint('╔ Body');
+    //   logPrint('║');
+    //   _printResponse(response);
+    //   logPrint('║');
+    //   _printLine('╚');
+    // }
     super.onResponse(response, handler);
   }
 

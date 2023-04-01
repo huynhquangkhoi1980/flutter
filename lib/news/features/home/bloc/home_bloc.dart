@@ -1,19 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:mevn_app/news/features/home/bloc/home_state.dart';
-import 'package:mevn_app/news/repositories/home_repo.dart';
+import 'package:mevn_app/news/models/post.dart';
+import 'package:mevn_app/news/repositories/repo.dart';
 
 class HomeBloc extends Cubit<HomeState> {
-  final HomeRepo _homeRepo;
-  HomeBloc(this._homeRepo) : super(InHomeState());
+  final NewsRepo _newsRepo;
+  HomeBloc(this._newsRepo) : super(InHomeState());
 
-  void init() async {
-    emit(LoadingState());
-    final res = await _homeRepo.getdata();
+  Future<List<Post>?> getDataLoadMore(
+    int _page,
+    int _perPage,
+    String _category,
+  ) async {
+    final res = await _newsRepo.getNews(_page, _perPage, _category);
+    List<Post>? data;
     res.fold(
-      (res) => emit(HomeLoadedState(res)),
+      (res) => data = res.posts,
       (exception) => emit(
-        ErrorHomeState('System error, please try again!!!'),
+        ErrorHomeState('Can not load data. Please try again!'),
       ),
     );
+    return data;
   }
 }

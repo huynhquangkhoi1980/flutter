@@ -11,13 +11,15 @@ dependencies:
   connectivity_plus: ^2.2.1
   dartz: ^0.10.1
   dio: ^4.0.4
+  drop_down_list: ^0.0.3
   equatable: ^2.0.3
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_html: ^2.2.1
   flutter_localizations:
     sdk: flutter
-  flutter_svg: ^1.0.3
+  flutter_svg: ^0.22.0
   get_it: any
   google_sign_in: null
   http: ^0.13.4
@@ -41,6 +43,6 @@ flutter:
   assets:
     - assets/images/logos/me_logo.png
     - assets/images/logos/logo.png
-    - assets/images/other/philosophy.svg
+    - assets/images/other/
     - assets/images/members/
     - assets/images/lead/

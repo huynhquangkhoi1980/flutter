@@ -4,8 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:mevn_app/app/utils/networks/interceptors/auth_interceptor.dart';
 import 'package:mevn_app/app/utils/repositories/auth_repo.dart';
 import 'package:mevn_app/app/utils/services/auth_service.dart';
-import 'package:mevn_app/book_order/repositories/book_register_repo.dart';
-import 'package:mevn_app/book_order/services/book_register_service.dart';
 import 'package:mevn_app/kickoff/local/pref_provider.dart';
 import 'package:mevn_app/kickoff/repositories/action_submit_repo.dart';
 import 'package:mevn_app/kickoff/repositories/member_evaluation_repo.dart';
@@ -27,8 +25,10 @@ import 'package:mevn_app/kickoff/services/team_evaluation_service.dart';
 import 'package:mevn_app/kickoff/services/team_service.dart';
 import 'package:mevn_app/kickoff/services/tech_lead_selection_service.dart';
 import 'package:mevn_app/kickoff/services/value_lead_selection_service.dart';
-import 'package:mevn_app/news/repositories/home_repo.dart';
-import 'package:mevn_app/news/services/home_service.dart';
+import 'package:mevn_app/news/repositories/repo.dart';
+import 'package:mevn_app/news/services/service.dart';
+import 'package:mevn_app/recruitment/repositories/recruitment_repo.dart';
+import 'package:mevn_app/recruitment/services/recruitment.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/flavor/flavor.dart';
@@ -69,14 +69,14 @@ Future<void> initDependency() async {
       ),
     );
 
-    if (kDebugMode) {
-      dio.interceptors.add(
-        PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-        ),
-      );
-    }
+    // if (kDebugMode) {
+    //   dio.interceptors.add(
+    //     PrettyDioLogger(
+    //       requestHeader: true,
+    //       requestBody: true,
+    //     ),
+    //   );
+    // }
     return dio;
   }
 
@@ -176,22 +176,22 @@ Future<void> initDependency() async {
   );
 
   // Blog API
-  locator.registerLazySingleton<HomeService>(() {
+  locator.registerLazySingleton<NewsService>(() {
     final dio = _createDio(FlavorConfig.instance!.values!.blogUrl!);
-    return HomeService(dio);
+    return NewsService(dio);
   });
 
   locator.registerLazySingleton(
-    () => HomeRepo(homeService: locator.get()),
+    () => NewsRepo(newsService: locator.get()),
   );
 
-    // register book API
-  locator.registerLazySingleton<BookRegisterService>(() {
-    final dio = _createDio(FlavorConfig.instance!.values!.mainUrl!);
-    return BookRegisterService(dio);
+  // API Recruitment
+  locator.registerLazySingleton<RecruitmentService>(() {
+    final dio = _createDio(FlavorConfig.instance!.values!.apiUrl!);
+    return RecruitmentService(dio);
   });
 
   locator.registerLazySingleton(
-    () => BookRegisterRepo(bookRegisterService: locator.get()),
+    () => RecruitmentRepo(recruitmentService: locator.get()),
   );
 }

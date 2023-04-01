@@ -1,30 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mevn_app/app/di/injection.dart';
+import 'package:mevn_app/app/utils/configs/custom_scroll_behavior.dart';
+import 'package:mevn_app/app/utils/constants/app_colors.dart';
+import 'package:mevn_app/news/features/home/bloc/category_bloc.dart';
+import 'package:mevn_app/news/features/home/bloc/category_state.dart';
 
-class DrawerMenuWidget extends StatelessWidget {
+class DrawerMenuWidget extends StatefulWidget {
   const DrawerMenuWidget({
+    required this.onTap,
     Key? key,
   }) : super(key: key);
 
+  final void Function(String) onTap;
+
+  @override
+  State<DrawerMenuWidget> createState() => _DrawerMenuWidgetState();
+}
+
+class _DrawerMenuWidgetState extends State<DrawerMenuWidget> {
+  late CategoryBloc? _categoryBloc;
+  late String categoryId = 'all';
+
+  @override
+  void initState() {
+    super.initState();
+    _categoryBloc = CategoryBloc(locator.get());
+  }
+
   @override
   Widget build(BuildContext context) {
+    var _crossFadeState = false;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.7,
       child: Drawer(
-        backgroundColor: const Color.fromRGBO(239, 130, 0, 1),
+        backgroundColor: AppColors.orangeMainColor,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              color: const Color.fromARGB(255, 255, 255, 255),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 72, bottom: 40),
-                child: Image.asset(
-                  'assets/images/logos/me_logo.png',
-                  height: 64,
-                ),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(
                 top: 20,
@@ -56,68 +70,77 @@ class DrawerMenuWidget extends StatelessWidget {
                 ),
               ),
             ),
-            ListTile(
-              textColor: const Color(0xFFFFFFFF),
-              iconColor: const Color(0xFFFFFFFF),
-              leading: const Icon(
-                Icons.train,
-              ),
-              title: const Text('Technology'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              textColor: const Color(0xFFFFFFFF),
-              iconColor: const Color(0xFFFFFFFF),
-              leading: const Icon(
-                Icons.train,
-              ),
-              title: const Text('Development Process'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              textColor: const Color(0xFFFFFFFF),
-              iconColor: const Color(0xFFFFFFFF),
-              leading: const Icon(
-                Icons.train,
-              ),
-              title: const Text('Teamwork'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              textColor: const Color(0xFFFFFFFF),
-              iconColor: const Color(0xFFFFFFFF),
-              leading: const Icon(
-                Icons.train,
-              ),
-              title: const Text('Human Skill'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            const AboutListTile(
-              icon: Icon(
-                Icons.info,
-                color: Color(0xFFFFFFFF),
-              ),
-              applicationIcon: Icon(
-                Icons.local_play,
-              ),
-              applicationName: 'MevnApp',
-              applicationVersion: '1.0',
-              applicationLegalese: '© 2022 Company',
-              aboutBoxChildren: [
-                ///Content goes here...
-              ],
-              child: Text(
-                'About app',
-                style: TextStyle(
-                  color: Color(0xFFFFFFFF),
+            SingleChildScrollView(
+              // controller: widget.scrollViewController,
+              child: BlocProvider(
+                create: (_) => _categoryBloc!..init(),
+                child: BlocBuilder<CategoryBloc, CategoryState>(
+                  builder: (_, state) {
+                    if (state is LoadingState) {
+                      return AnimatedContainer(
+                        height: _crossFadeState
+                            ? MediaQuery.of(context).size.height - 120
+                            : MediaQuery.of(context).size.height * 0.2,
+                        duration: const Duration(seconds: 8),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }
+                    if (state is CategoryLoadedState) {
+                      _crossFadeState = true;
+                      final data = state.data.categories;
+                      return AnimatedContainer(
+                        height: _crossFadeState
+                            ? MediaQuery.of(context).size.height - 120
+                            : MediaQuery.of(context).size.height * 0.2,
+                        duration: const Duration(milliseconds: 220),
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const CustomScrollBehavior()
+                              .getScrollPhysics(context),
+                          itemCount: data!.length,
+                          separatorBuilder: (BuildContext context, int index) =>
+                              Divider(
+                            height: 0,
+                            thickness: 0.5,
+                            color: Colors.grey[300],
+                          ),
+                          itemBuilder: (_, index) => ListTile(
+                            horizontalTitleGap: 0,
+                            textColor: categoryId == '${data[index].catID}'
+                                ? const Color(0xFFE31A1A)
+                                : const Color(0xFFFFFFFF),
+                            iconColor: const Color(0xFFFFFFFF),
+                            leading: const Icon(
+                              Icons.navigate_next,
+                            ),
+                            title: Text('${data[index].name}'),
+                            onTap: () {
+                              widget.onTap('${data[index].catID}');
+                              setState(
+                                () => categoryId = '${data[index].catID}',
+                              );
+                              Navigator.pop(context, '${data[index].catID}');
+                            },
+                          ),
+                        ),
+                      );
+                    } else if (state is ErrorCategoryState) {
+                      return Center(
+                        child: Text(
+                          state.errorMessage,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
                 ),
               ),
             ),

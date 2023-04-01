@@ -1,6 +1,7 @@
 class Post {
   late int id;
   String? postAuthor;
+  String? postAuthorName;
   String? postDate;
   String? postDateGmt;
   String? postContent;
@@ -23,10 +24,12 @@ class Post {
   String? postMimeType;
   String? commentCount;
   String? filter;
+  String? thumbnail;
 
   Post({
     required this.id,
     this.postAuthor,
+    this.postAuthorName,
     this.postDate,
     this.postDateGmt,
     this.postContent,
@@ -49,11 +52,13 @@ class Post {
     this.postMimeType,
     this.commentCount,
     this.filter,
+    this.thumbnail,
   });
 
   Post.fromJson(Map<String, dynamic> json) {
     id = json['ID'] as int;
     postAuthor = json['post_author'] as String?;
+    postAuthorName = json['post_author_name'] as String?;
     postDate = json['post_date'] as String?;
     postDateGmt = json['post_date_gmt'] as String?;
     postContent = json['post_content'] as String?;
@@ -76,12 +81,14 @@ class Post {
     postMimeType = json['post_mime_type'] as String?;
     commentCount = json['comment_count'] as String?;
     filter = json['filter'] as String?;
+    thumbnail = json['thumbnail'] as String?;
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['ID'] = id;
     data['post_author'] = postAuthor;
+    data['post_author_name'] = postAuthorName;
     data['post_date'] = postDate;
     data['post_date_gmt'] = postDateGmt;
     data['post_content'] = postContent;
@@ -104,6 +111,7 @@ class Post {
     data['post_mime_type'] = postMimeType;
     data['comment_count'] = commentCount;
     data['filter'] = filter;
+    data['thumbnail'] = thumbnail;
     return data;
   }
 }
