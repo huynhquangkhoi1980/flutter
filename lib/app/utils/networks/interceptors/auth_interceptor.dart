@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:mevn_app/kickoff/local/pref_provider.dart';
 
 class AuthInterceptor extends Interceptor {
@@ -15,6 +16,8 @@ class AuthInterceptor extends Interceptor {
     if (!isAuthenticationAlready(options)) {
       final idToken = _prefProvider.idToken;
       if (idToken != null && idToken.isNotEmpty) {
+        // ignore: avoid_print
+        debugPrint(idToken);
         options.headers['token'] = idToken;
       }
     }

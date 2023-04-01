@@ -19,7 +19,6 @@ void main() {
         values: FlavorValues(
           mainUrl: 'http://dev.com',
           blogUrl: 'https://www.marketenterprise.vn/blog',
-          apiUrl: 'https://www.marketenterprise.vn/api',
         ),
       ),
       child: const App(),

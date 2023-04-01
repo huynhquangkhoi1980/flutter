@@ -4,10 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mevn_app/app/di/injection.dart';
 import 'package:mevn_app/app/features/auth/bloc/auth_bloc.dart';
 import 'package:mevn_app/app/features/auth/bloc/auth_state.dart';
-import 'package:mevn_app/app/utils/constants/app_assets.dart';
-import 'package:mevn_app/app/utils/constants/app_colors.dart';
-import 'package:mevn_app/app/utils/constants/app_constants.dart';
-import 'package:mevn_app/app/utils/constants/app_menu.dart';
+import 'package:mevn_app/app/utils/route/app_route.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -33,10 +30,6 @@ class _AccountScreenState extends State<AccountScreen> {
       child: Column(
         children: [
           CustomContainerWidget(
-            border: Border.all(
-              width: 2,
-              color: AppColors.orangeMainColor,
-            ),
             padding: const EdgeInsets.only(
               top: 8,
               left: 12,
@@ -44,7 +37,7 @@ class _AccountScreenState extends State<AccountScreen> {
               bottom: 2,
             ),
             child: SvgPicture.asset(
-              AppAssets.philosophyImage,
+              'assets/images/other/philosophy.svg',
               color: Colors.black,
             ),
           ),
@@ -69,9 +62,6 @@ class _AccountScreenState extends State<AccountScreen> {
                   return Column(
                     children: [
                       CustomContainerWidget(
-                        border: Border.all(
-                          color: AppColors.orangeMainColor,
-                        ),
                         height: 80,
                         child: Row(
                           children: [
@@ -120,67 +110,64 @@ class _AccountScreenState extends State<AccountScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      for (var index = 0;
-                          index < AppMenu.appMainMenu.length;
-                          ++index)
-                        Container(
-                          height: 54,
-                          decoration: BoxDecoration(
-                            borderRadius: index == 0
-                                ? const BorderRadius.only(
-                                    topLeft: Radius.circular(4),
-                                    topRight: Radius.circular(4),
-                                  )
-                                : (index == AppMenu.appMainMenu.length - 1
-                                    ? const BorderRadius.only(
-                                        bottomLeft: Radius.circular(4),
-                                        bottomRight: Radius.circular(4),
-                                      )
-                                    : BorderRadius.zero),
-                            color: Colors.white,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            boxShadow: [
-                              const BoxShadow(
-                                color: AppColors.orangeMainColor,
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          margin: EdgeInsets.zero,
-                          child: ListTile(
-                            hoverColor: Colors.red,
-                            leading: Icon(
-                              AppMenu.appMainMenu[index]['icon'] as IconData,
-                            ),
-                            horizontalTitleGap: 0,
-                            title: Text(
-                              '${AppMenu.appMainMenu[index]['title']}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
+                      CustomContainerWidget(
+                        height: 118,
+                        padding: EdgeInsetsDirectional.zero,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 58,
+                              child: ListTile(
+                                shape: const Border(
+                                  bottom: BorderSide(
+                                    color: Color.fromRGBO(239, 130, 0, 1),
+                                  ),
+                                ),
+                                leading: const Icon(Icons.insert_chart),
+                                horizontalTitleGap: 0,
+                                title: const Text(
+                                  'KICKOFF',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                onTap: () => {},
+                                trailing: const Icon(Icons.navigate_next),
                               ),
                             ),
-                            onTap: () {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                AppMenu.appMainMenu[index]['route'] as String,
-                                (route) => true,
-                              );
-                            },
-                            trailing: const Icon(Icons.navigate_next),
-                          ),
+                            SizedBox(
+                              height: 58,
+                              child: ListTile(
+                                leading: const Icon(
+                                  Icons.collections_bookmark_sharp,
+                                ),
+                                horizontalTitleGap: 0,
+                                title: const Text(
+                                  'ORDER BOOKS',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                onTap: () => {
+                                  Navigator.of(context).pushNamed(
+                                  AppRoute.routeBookOrder,
+                                )
+                                },
+                                trailing: const Icon(Icons.navigate_next),
+                              ),
+                            ),
+                          ],
                         ),
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
                       CustomContainerWidget(
-                        border: Border.all(
-                          color: AppColors.orangeMainColor,
-                        ),
                         padding: EdgeInsetsDirectional.zero,
                         height: 56,
                         child: ListTile(
-                          leading: const Icon(Icons.logout),
-                          horizontalTitleGap: 0,
                           title: const Text(
                             'Logout',
                             style: TextStyle(
@@ -189,7 +176,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                           ),
                           onTap: () => _authBloc!.logout(),
-                          trailing: const Icon(Icons.navigate_next),
+                          trailing: const Icon(Icons.logout),
                         ),
                       ),
                     ],
@@ -215,7 +202,8 @@ class _AccountScreenState extends State<AccountScreen> {
                       color: Color.fromARGB(255, 16, 110, 219),
                     ),
                   ),
-                  onTap: () => launchUrl(Uri.parse(AppConstants.websiteUrl)),
+                  onTap: () =>
+                      launchUrl(Uri.parse('https://www.marketenterprise.vn')),
                 ),
               ],
             ),
@@ -256,7 +244,7 @@ class AccountLoginWidget extends StatelessWidget {
       height: 50,
       child: TextButton(
         style: TextButton.styleFrom(
-          backgroundColor: AppColors.orangeMainColor,
+          backgroundColor: const Color.fromRGBO(239, 130, 0, 1),
         ),
         onPressed: () => authBloc!.login(),
         child: Center(
@@ -273,7 +261,20 @@ class CustomContainerWidget extends StatelessWidget {
     required this.child,
     this.height = 200,
     this.padding = const EdgeInsets.all(8),
-    required this.border,
+    this.border = const Border(
+      top: BorderSide(
+        color: Color.fromRGBO(239, 130, 0, 1),
+      ),
+      bottom: BorderSide(
+        color: Color.fromRGBO(239, 130, 0, 1),
+      ),
+      left: BorderSide(
+        color: Color.fromRGBO(239, 130, 0, 1),
+      ),
+      right: BorderSide(
+        color: Color.fromRGBO(239, 130, 0, 1),
+      ),
+    ),
   }) : super(key: key);
 
   final Widget child;

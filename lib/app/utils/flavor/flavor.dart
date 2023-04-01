@@ -8,12 +8,10 @@ class FlavorValues {
   FlavorValues({
     @required this.mainUrl,
     @required this.blogUrl,
-    @required this.apiUrl,
   });
 
   final String? mainUrl;
   final String? blogUrl;
-  final String? apiUrl;
 }
 
 class FlavorConfig {

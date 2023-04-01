@@ -3,6 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:mevn_app/app/features/auth/view/home.dart';
 import 'package:mevn_app/app/features/main/view/main.dart';
+import 'package:mevn_app/book_order/features/book_order_approve/view/approve.dart';
+import 'package:mevn_app/book_order/features/book_order_detail/view/list.dart';
+import 'package:mevn_app/book_order/features/book_register/view/register.dart';
 import 'package:mevn_app/kickoff/features/member_evaluations/view/detail.dart';
 import 'package:mevn_app/kickoff/features/member_evaluations/view/list.dart';
 import 'package:mevn_app/kickoff/features/pm_selection/view/list.dart';
@@ -13,10 +16,10 @@ import 'package:mevn_app/kickoff/features/team_evaluations/view/list.dart';
 import 'package:mevn_app/kickoff/features/tech_lead_selection/view/list.dart';
 import 'package:mevn_app/kickoff/features/value_lead_selection/view/list.dart';
 import 'package:mevn_app/kickoff/view/kickoff_main.dart';
-import 'package:mevn_app/news/features/home/view/detail.dart';
 import 'package:mevn_app/news/features/home/view/index.dart';
-import 'package:mevn_app/recruitment/features/home/view/index.dart';
 import 'package:page_transition/page_transition.dart';
+
+import '../../../book_order/view/bookorder_main.dart';
 
 class AppRoute {
   factory AppRoute() => _instance;
@@ -41,8 +44,15 @@ class AppRoute {
       '/list-sub-project-selection';
   static const String routeListProjectSelection = '/list-project-selection';
   static const String routeListNews = '/list-news';
-  static const String routeDetailNews = '/detail-news';
-  static const String routeRecruitmentFormScreen = '/recruitment-form';
+
+  // Book order feature
+  static const String routeBookOrder = '/book-order';
+
+  static const String routeBookOrderRegister = '/book-order-register';
+
+  static const String routeBookOrderList = '/book-order-list';
+
+  static const String routeBookOrderApprove = 'book-order-approve';
 
   ///#endregion
 
@@ -87,12 +97,28 @@ class AppRoute {
         return _pageRoute(settings, const ListSubProjectScreen());
       case routeListProjectSelection:
         return _pageRoute(settings, const ListProjectScreen());
+
+      // Book order feature
+      case routeBookOrder:
+        return _pageRoute(settings, const BookOrderScreen());
+      case routeBookOrderRegister:
+        return _pageRoute(
+            settings,
+            BookOrderRegisterScreen(
+              arguments: settings.arguments,
+            ));
+      case routeBookOrderList:
+        return _pageRoute(settings, const BookOrderListScreen());
+
+      case routeBookOrderApprove:
+        return _pageRoute(
+            settings,
+            BookOrderApproveScreen(
+              arguments: settings.arguments,
+            ));
+
       case routeListNews:
         return _pageRoute(settings, const ListNewsScreen());
-      case routeDetailNews:
-        return _pageRoute(settings, const DetailNewsScreen());
-      case routeRecruitmentFormScreen:
-        return _pageRoute(settings, const RecruitmentFormScreen());
       default:
         return null;
     }

@@ -155,6 +155,42 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 110,
+                          child: Card(
+                            shadowColor: Colors.grey.shade100,
+                            color: const Color.fromARGB(255, 230, 229, 229),
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Colors.grey.shade400,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(6),
+                              ),
+                            ),
+                            margin: const EdgeInsets.only(bottom: 14),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.only(bottom: 5),
+                              title: const Center(
+                                child: Text(
+                                  'BOOK-ORDER',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  AppRoute.routeBookOrder,
+                                );
+                              },
+                              selectedColor: Colors.red,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

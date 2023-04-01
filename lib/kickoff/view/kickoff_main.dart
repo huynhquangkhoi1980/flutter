@@ -32,8 +32,9 @@ class _KickioffState extends State<KickoffScreen> {
             icon: const Icon(Icons.home),
             tooltip: 'App home',
             onPressed: () {
-              Navigator.of(context).popAndPushNamed(
-                AppRoute.routeKickoff,
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                AppRoute.routeHome,
+                (route) => false,
               );
             },
           ),
